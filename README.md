@@ -70,8 +70,8 @@ Y = 1 - B
 - ✅ CMY Image  
 - ✅ HSI Image
 
-output.png
-
+[output.png
+](https://github.com/foranurag0202/Color-Space-Conversion-using-Matlab/blob/main/output.png)
 ---
 
 ## 🔍 Future Scope
