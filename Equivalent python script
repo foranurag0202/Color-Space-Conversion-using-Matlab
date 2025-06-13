@@ -1,0 +1,51 @@
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+# Read image using OpenCV (BGR format by default)
+img_bgr = cv2.imread('DSCN1981.JPG')  # update path as needed
+img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+
+# Normalize to [0,1]
+I = img_rgb.astype('float64') / 255.0
+
+# CMY conversion
+C = 1 - I[:, :, 0]
+M = 1 - I[:, :, 1]
+Y = 1 - I[:, :, 2]
+CMY = np.stack((C, M, Y), axis=2)
+
+# HSI conversion
+R = I[:, :, 0]
+G = I[:, :, 1]
+B = I[:, :, 2]
+
+num = 0.5 * ((R - G) + (R - B))
+den = np.sqrt((R - G)**2 + (R - B)*(G - B)) + 1e-6  # avoid divide by zero
+theta = np.arccos(np.clip(num / den, -1, 1))  # restrict angle range
+
+H = np.copy(theta)
+H[B > G] = 2 * np.pi - H[B > G]
+H = H / (2 * np.pi)  # Normalize to [0,1]
+
+S = 1 - (3 * np.min(I, axis=2) / (np.sum(I, axis=2) + 1e-6))
+I_mean = np.mean(I, axis=2)
+
+HSI = np.stack((H, S, I_mean), axis=2)
+
+# Display images
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+axs[0].imshow(img_rgb)
+axs[0].set_title('RGB Image')
+axs[0].axis('off')
+
+axs[1].imshow(CMY)
+axs[1].set_title('CMY Image')
+axs[1].axis('off')
+
+axs[2].imshow(HSI)
+axs[2].set_title('HSI Image')
+axs[2].axis('off')
+
+plt.tight_layout()
+plt.show()
