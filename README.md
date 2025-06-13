@@ -70,7 +70,7 @@ Y = 1 - B
 - ✅ CMY Image  
 - ✅ HSI Image
 
-(Add screenshots if available)
+output.png
 
 ---
 
